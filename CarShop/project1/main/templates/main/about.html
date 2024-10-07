@@ -1,0 +1,60 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block category %}
+<div style="display: inline-flex; flex-wrap: wrap; margin-left: 30px; margin-top: 80px; padding: 10px;">
+    <h1 style="font-weight: bold; color: rgb(0, 0, 0);">{{car.name}}</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+<div style="display: block; width: 40%; margin-top: 30px; margin-left: 80px; padding: 10px;">
+    
+        <input type="hidden" name="oldName" value="{{ car.name }}">
+
+        <div class="form-outline">
+            <img src="{{ car.img }}" width="1200" height="600" style="margin-left: 40px;">
+        </div>
+
+        <h1 style="font-weight: bold; margin-top: 10px;">{{car.category}} car</h1>
+
+        <h1>{{ car.about }}</h1>
+        <hr>
+
+        <h1 style="font-weight: bold; margin-top: 10px;">Start with ${{car.price}}K</h1>
+
+        {% if aRaiting > 0 %}
+        <h1 style=" font-weight: bold;">Average raiting {{aRaiting}}</h1>
+        {% endif %}
+
+        <hr>
+
+        <h1 style="font-weight: bold; margin-left: 30px; margin-top: 10px;">Comments: </h1>
+        <div style="margin-left: 100px; padding-top: 25px; padding-bottom: 15px; display: flexbox; flex-wrap: wrap;">
+            {% for coment in car.comments %}
+                {% if isLogin and coment.user.login == user.login %}
+                    <h2><img src= "{{ coment.user.img }}" width="50" height="50" style="border-radius: 50%; "> You {{coment.raiting}}/10 </h2>
+                    <p style="margin-left: 40px; width: 80%; border: 1px solid black;"> {{coment.comment}} </p>
+                {% else %}
+                    <h2><img src= "{{ coment.user.img }}" width="50" height="50" style="border-radius: 50%; "> {{coment.user.login}} {{coment.raiting}}/10 </h2>
+                    <p style="margin-left: 40px; width: 80%; border: 1px solid black;"> {{coment.comment}} </p>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if not haveUserComment and user != None %}
+        <h2> Your comment: </h2>
+        <form action="Comment" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="name" value="{{car.name}}">
+            <div><input type="number" max="10" min="1" placeholder="Raiting" name="raiting"></div>
+            <div><textarea name="comment" placeholder="Input your comment here" style="width: 550px;" rows="4"></textarea></div>
+            <button class="btn btn-outline-success" type="submit" style="background-color: green; color: white;">Comment</button>
+        </form>
+        {% endif %}
+</div>
+
+
+{% endblock %}

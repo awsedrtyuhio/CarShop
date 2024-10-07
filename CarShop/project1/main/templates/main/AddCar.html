@@ -1,0 +1,39 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div style=" width: 30%;  margin-left: 30px; padding-top: 100px;">
+    <form action="AddCar" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+ 
+        <input type="text" id="firstName" name="name" class="form-control form-control-lg" required/>
+        <label class="form-label" for="firstName" style="font-weight: bold; ">car name</label>
+
+        <div class="form-outline datepicker w-100">
+            {{ form.as_p }}
+        </div>
+        <label class="form-label" for="firstName" style="font-weight: bold; ">Avatar</label>
+
+        <select class="form-select" aria-label="Default select example" name="category" style="font-weight: bold; " required>
+            {% for category in categoryes %}
+                {% if category != 'All' %}
+                    <option value="{{ category }}">{{category}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <div class="form-outline" style="margin-top: 10px;">
+            <input type="number" min="1000" name="price" class="form-control form-control-lg" step="0.01" required/>
+            <label class="form-label" for="firstName" style="font-weight: bold; ">Price</label>
+        </div>
+
+        <div class="form-outline" style="margin-top: 10px;">
+            <textarea name="about" style="width: 100%;"></textarea>
+            <label class="form-label" for="about" style="font-weight: bold; ">About</label>
+        </div>
+
+        <button class="btn btn-outline-success" type="submit" style="border: none;"><img src="{% static 'main/gifs/car.gif' %}" width="60" height="60"></button>
+    </form>
+</div>
+{% endblock %}
